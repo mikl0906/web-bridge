@@ -1,0 +1,34 @@
+{
+  "name": "web-bridge-sdk",
+  "version": "0.1.0",
+  "description": "Connect a web app to the Web Bridge desktop hub: expose your app's operations as a local REST API and MCP server for agents and scripts.",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run build"
+  },
+  "devDependencies": {
+    "typescript": "~5.8.3"
+  },
+  "keywords": [
+    "mcp",
+    "bridge",
+    "localhost",
+    "agent",
+    "tauri"
+  ]
+}
