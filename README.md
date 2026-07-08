@@ -8,22 +8,22 @@ them over plain HTTP. Everything stays on the machine.
 ```
 ┌────────────┐  WebSocket   ┌────────────┐  HTTP (REST / MCP)  ┌──────────┐
 │  web app   │ ───────────► │   bridge   │ ◄────────────────── │  agent / │
-│ (browser)  │   hello +    │ :7421      │   GET /apps         │  script  │
+│ (browser)  │   hello +    │   :7421    │   GET /apps         │  script  │
 └────────────┘   tools      └────────────┘   POST /<app>/…     └──────────┘
 ```
 
 The bridge never understands any app's domain — it relays tool calls to the
 connected app and returns the reply. Browsers can't listen on ports, which is
-the whole reason the bridge exists: the app dials *out* to `localhost:7421`,
+the whole reason the bridge exists: the app dials _out_ to `localhost:7421`,
 and the bridge listens on its behalf.
 
 ## Repo layout
 
-| Path          | What it is                                                        |
-| ------------- | ----------------------------------------------------------------- |
-| `web-bridge/` | The Tauri desktop app (React UI + axum server in `src-tauri/`)    |
-| `sdk/`        | `web-bridge-sdk` — npm package web apps use to connect            |
-| `examples/`   | `todo.mjs`, a minimal app connected through the SDK               |
+| Path          | What it is                                                     |
+| ------------- | -------------------------------------------------------------- |
+| `web-bridge/` | The Tauri desktop app (React UI + axum server in `src-tauri/`) |
+| `sdk/`        | `web-bridge-sdk` — npm package web apps use to connect         |
+| `examples/`   | `todo.mjs`, a minimal app connected through the SDK            |
 
 ## Quick start
 
@@ -49,14 +49,14 @@ claude mcp add --transport http todo http://localhost:7421/todo/<instanceId>/mcp
 The server binds `127.0.0.1:7421` (scanning upward if taken; the UI shows the
 real port). CORS is permissive — it's loopback-only.
 
-| Route                                | What it does                                                   |
-| ------------------------------------ | -------------------------------------------------------------- |
-| `GET /` or `GET /apps`               | Discovery: every connected app, description, instructions, per-instance endpoint URLs, tool names |
-| `GET /status`                        | Light status snapshot (used by the bridge UI)                  |
-| `GET /ws/app`                        | WebSocket endpoint apps connect to                             |
-| `POST /{app}/{instance}/mcp`         | MCP server for that instance (Streamable HTTP, JSON responses) |
-| `POST /{app}/{instance}/api/{tool}`  | Plain REST: body = tool payload, response = tool result        |
-| `GET  /{app}/{instance}/tools`       | Full tool catalog with input schemas, no MCP handshake needed  |
+| Route                                                      | What it does                                                                                        |
+| ---------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| `GET /` or `GET /apps`                                     | Discovery: every connected app, description, instructions, per-instance endpoint URLs, tool names   |
+| `GET /status`                                              | Light status snapshot (used by the bridge UI)                                                       |
+| `GET /ws/app`                                              | WebSocket endpoint apps connect to                                                                  |
+| `POST /{app}/{instance}/mcp`                               | MCP server for that instance (Streamable HTTP, JSON responses)                                      |
+| `POST /{app}/{instance}/api/{tool}`                        | Plain REST: body = tool payload, response = tool result                                             |
+| `GET  /{app}/{instance}/tools`                             | Full tool catalog with input schemas, no MCP handshake needed                                       |
 | `POST /{app}/mcp`, `/{app}/api/{tool}`, `GET /{app}/tools` | Shorthand while exactly one instance of the app is connected (`409` + instance list when ambiguous) |
 
 Errors are `{ "error": { "message": … } }` with meaningful statuses: `404`
